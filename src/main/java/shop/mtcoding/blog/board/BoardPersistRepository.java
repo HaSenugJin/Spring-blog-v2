@@ -34,4 +34,23 @@ public class BoardPersistRepository {
         // board -> 영속 객체
         return board;
     }
+
+    @Transactional
+    public void deleteById(Integer id) {
+        // 방법 1
+        // 쿼리를 직접 작성
+        Query query = em.createQuery("delete from Board b where b.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
+
+    @Transactional
+    public void deleteById2(Integer id) {
+        // 방법 2
+        // 조회하고 삭제
+        Board board = findById(id); // id로 조회를 먼저 해주고
+        em.remove(board); // PC에 객체 지우고, 트랜잭션 종료시에 삭제 쿼리가 날아간다.
+        // 비즈니스 로직은 서비스에서 처리하는게 좋다.
+        // 그래서 쌤은 방법 1을 좋아한다 하심
+    }
 }
