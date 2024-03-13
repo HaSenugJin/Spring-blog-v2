@@ -76,4 +76,16 @@ public class BoardPersistRepositoryTest {
         em.clear();
         boardPersistRepository.findById(id);
     }
+
+    @Test
+    public void updateById_test() {
+        // given
+        Integer id = 1;
+        String title = "제목수정1";
+
+        // when
+        Board board = boardPersistRepository.findById(id);
+        board.setTitle(title);
+        em.flush();
+    }
 }

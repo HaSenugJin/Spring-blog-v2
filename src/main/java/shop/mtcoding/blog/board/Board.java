@@ -30,4 +30,10 @@ public class Board {
         this.content = content;
         this.username = username;
     }
+
+    public void update(BoardRequest.UpdateDTO requestDTO) {
+        this.title = requestDTO.getTitle();
+        this.content = requestDTO.getContent();
+        this.username = requestDTO.getUsername();
+    }
 }

@@ -53,4 +53,10 @@ public class BoardPersistRepository {
         // 비즈니스 로직은 서비스에서 처리하는게 좋다.
         // 그래서 쌤은 방법 1을 좋아한다 하심
     }
+
+    @Transactional
+    public void updateById(Integer id, BoardRequest.UpdateDTO requestDTO) {
+        Board board = findById(id);
+        board.update(requestDTO);
+    }
 }
