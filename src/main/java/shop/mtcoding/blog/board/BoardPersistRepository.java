@@ -13,6 +13,12 @@ import java.util.List;
 public class BoardPersistRepository {
     private final EntityManager em;
 
+    public List<Board> findAll() {
+        Query query = em.createQuery("select b from Board b order by b.id desc", Board.class);
+
+        return query.getResultList();
+    }
+
     @Transactional
     public Board save(Board board) {
 
@@ -21,34 +27,5 @@ public class BoardPersistRepository {
 
         // board -> 영속 객체
         return board;
-    }
-
-    public Board findById(Integer id) {
-        Query query = em.createNativeQuery("select * from board_tb where id = ?", Board.class);
-        query.setParameter(1, id);
-        return (Board) query.getSingleResult();
-    }
-
-    public List<Board> findAll() {
-        Query query = em.createNativeQuery("select * from board_tb order by id desc", Board.class);
-        return query.getResultList();
-    }
-
-
-    @Transactional
-    public void deleteById(Integer id) {
-        Query query = em.createNativeQuery("delete from board_tb where id = ?");
-        query.setParameter(1, id);
-        query.executeUpdate();
-    }
-
-    @Transactional
-    public void updateById(Integer id, String title, String content, String username) {
-        Query query = em.createNativeQuery("update board_tb set title = ?, content = ?, username = ? where id = ?");
-        query.setParameter(1, title);
-        query.setParameter(2, content);
-        query.setParameter(3, username);
-        query.setParameter(4, id);
-        query.executeUpdate();
     }
 }
