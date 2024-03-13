@@ -3,11 +3,13 @@ package shop.mtcoding.blog.board;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import shop.mtcoding.blog.util.MyDateUtil;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 
 import java.sql.Timestamp;
 
+@NoArgsConstructor
 @Data
 @Table(name = "board_tb")
 @Entity
@@ -19,9 +21,13 @@ public class Board {
     private String title;
     private String content;
     private String username;
+
+    @CreationTimestamp // insert 될 때 날짜를 자동으로 넣어준다.
     private Timestamp createdAt;
 
-    private String getTime() {
-        return MyDateUtil.timestampFormat(createdAt);
+    public Board(String title, String content, String username) {
+        this.title = title;
+        this.content = content;
+        this.username = username;
     }
 }
