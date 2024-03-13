@@ -13,6 +13,12 @@ import java.util.List;
 public class BoardPersistRepository {
     private final EntityManager em;
 
+    public Board findById(Integer id) {
+        Board board = em.find(Board.class, id);
+
+        return board;
+    }
+
     public List<Board> findAll() {
         Query query = em.createQuery("select b from Board b order by b.id desc", Board.class);
 

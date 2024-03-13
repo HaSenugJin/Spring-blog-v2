@@ -26,7 +26,6 @@ public class BoardPersistRepositoryTest {
         System.out.println("save_test : " + board);
 
         // then
-
     }
 
     @Test
@@ -40,5 +39,13 @@ public class BoardPersistRepositoryTest {
         System.out.println("findAll_size : " + boardList.size());
 
         assertThat(boardList.size()).isEqualTo(4);
+    }
+
+    @Test
+    public void findById_test() {
+        Integer id = 1;
+
+        Board board = boardPersistRepository.findById(id);
+        boardPersistRepository.findById(id);
     }
 }
