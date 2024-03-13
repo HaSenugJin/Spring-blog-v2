@@ -13,6 +13,16 @@ import java.util.List;
 @Controller
 public class BoardController {
 
+    private final BoardRepository boardRepository;
+
+    @GetMapping("/board/{id}")
+    public String detail(@PathVariable Integer id, HttpServletRequest request) {
+        Board board = boardRepository.findByIdJoinUser(id);
+        request.setAttribute("board", board);
+
+        return "board/detail";
+    }
+
     @GetMapping("/")
     public String index() {
 
@@ -23,13 +33,6 @@ public class BoardController {
     @GetMapping("/board/save-form")
     public String saveForm() {
         return "/board/save-form";
-    }
-
-    @GetMapping("/board/{id}")
-    public String detail(@PathVariable Integer id, HttpServletRequest request) {
-
-
-        return "board/detail";
     }
 
     @GetMapping("/board/{id}/update-form")
