@@ -5,12 +5,12 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
 import shop.mtcoding.blog.user.User;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Repository
@@ -31,7 +31,7 @@ public class BoardRepository {
         Query q1 = em.createQuery("select b from Board b order by b.id desc", Board.class);
         List<Board> boardList = q1.getResultList();
 
-        Set<Integer> userIds = new HashSet<>();
+        Set<Integer> userIds = boardList.stream().map(board -> board.getUser().getId()).collect(Collectors.toSet());
         for (Board board : boardList) {
             userIds.add(board.getUser().getId());
             System.out.println(userIds);
@@ -93,6 +93,4 @@ public class BoardRepository {
         Board board = em.find(Board.class, id);
         return board;
     }
-
-
 }

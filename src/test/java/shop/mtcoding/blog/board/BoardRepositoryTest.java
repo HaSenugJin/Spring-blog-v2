@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Import(BoardRepository.class)
 @DataJpaTest
@@ -73,10 +75,11 @@ public class BoardRepositoryTest {
     @Test
     public void findAll2_test() {
         List<Board> boardList = boardRepository.findAllV2();
-        System.out.println("findAllV2_test : 조회완료 쿼리 2번");
-        boardList.forEach(board -> {
-            System.out.println(board);
-        });
+        Set<Integer> userIds = boardList.stream().map(board -> board.getUser().getId()).collect(Collectors.toSet());
+        for (Board board : boardList) {
+            userIds.add(board.getUser().getId());
+        }
+        System.out.println(userIds);
     }
 
     @Test
@@ -84,7 +87,7 @@ public class BoardRepositoryTest {
         List<Board> boardList = boardRepository.findAllV3();
         System.out.println("findAllV2_test : 조회완료 쿼리 2번");
         boardList.forEach(board -> {
-            System.out.println(board);
+            System.out.println(boardList);
         });
     }
 

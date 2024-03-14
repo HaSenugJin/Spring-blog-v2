@@ -42,4 +42,10 @@ public class UserController {
         session.setAttribute("sessionUser", sessionUser);
         return "redirect:/";
     }
+
+    @PostMapping("/join")
+    public String join(UserRequest.JoinDTO requestDTO) {
+        userRepository.save(requestDTO.toEntity());
+        return "redirect:/";
+    }
 }

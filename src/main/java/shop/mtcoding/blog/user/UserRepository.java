@@ -4,6 +4,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import shop.mtcoding.blog.board.Board;
 
 @RequiredArgsConstructor
 @Repository
@@ -17,5 +19,10 @@ public class UserRepository {
         query.setParameter("password", loginDTO.getPassword());
 
         return (User) query.getSingleResult();
+    }
+
+    @Transactional
+    public void save(User user) {
+        em.persist(user);
     }
 }

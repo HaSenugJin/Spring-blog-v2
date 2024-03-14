@@ -20,4 +20,18 @@ public class userRepositoryTest {
         reqDTO.setPassword("1234");
         User user = userRepository.findByUsernameAndPassword(reqDTO);
     }
+
+    @Test
+    public void save_test(UserRequest.JoinDTO joinDTO){
+        // given
+        User user = joinDTO.toEntity();
+
+        user.setUsername("egdg");
+        user.setPassword("1234");
+        user.setEmail("egdg@naver.com");
+        // when
+        userRepository.save(user);
+
+        // then
+    }
 }
