@@ -38,12 +38,7 @@ public class UserController {
     public String login(UserRequest.LoginDTO requestDTO) {
         User sessionUser = userRepository.findByUsernameAndPassword(requestDTO);
 
-        if (sessionUser == null) {
-            return "redirect:/login-form";
-        }
-
         session.setAttribute("sessionUser", sessionUser);
-
         return "redirect:/";
     }
 }
