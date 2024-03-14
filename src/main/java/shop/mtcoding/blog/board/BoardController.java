@@ -1,11 +1,13 @@
 package shop.mtcoding.blog.board;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import shop.mtcoding.blog.user.User;
 
 import java.util.List;
 
@@ -14,6 +16,15 @@ import java.util.List;
 public class BoardController {
 
     private final BoardRepository boardRepository;
+    private final HttpSession session;
+
+    @PostMapping("/board/save")
+    public String save(BoardRequest.saveDTO requestDTO) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        boardRepository.save(requestDTO.toEntity(sessionUser));
+
+        return "redirect:/";
+    }
 
     @GetMapping("/board/{id}")
     public String detail(@PathVariable Integer id, HttpServletRequest request) {
@@ -43,12 +54,7 @@ public class BoardController {
         return "board/update-form";
     }
 
-    @PostMapping("/board/save")
-    public String save() {
 
-
-        return "redirect:/";
-    }
 
     @PostMapping("/board/{id}/update")
     public String findById(@PathVariable Integer id) {
