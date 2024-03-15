@@ -6,7 +6,7 @@ import shop.mtcoding.blog.user.User;
 public class BoardRequest {
 
     @Data
-    public static class saveDTO {
+    public static class SaveDTO {
         private String title;
         private String content;
 
@@ -17,5 +17,11 @@ public class BoardRequest {
                     .content(content)
                     .user(user).build();
         }
+    }
+
+    @Data
+    public static class UpdateDTO {
+        private String title;
+        private String content;
     }
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
 import shop.mtcoding.blog.user.User;
 
 import java.util.HashSet;
@@ -18,6 +17,13 @@ public class BoardRepository {
     private final EntityManager em;
 
     @Transactional
+    public void updateById(int id, String title, String content) {
+        Board board = findById(id);
+        board.setTitle(title);
+        board.setContent(content);
+    } // 더티채킹, 이러면 다른걸 지가 보고 알아서 업데이트 쿼리 짜서 발동시켜줌
+
+    @Transactional
     public void deleteById(Integer id) {
         Query query = em.createQuery("delete from Board b where b.id = :id");
         query.setParameter("id", id);
@@ -25,8 +31,9 @@ public class BoardRepository {
     }
 
     @Transactional
-    public void save(Board board) {
+    public Board save(Board board) {
         em.persist(board);
+        return board;
     }
 
     public List<Board> findAll() {
@@ -100,6 +107,4 @@ public class BoardRepository {
         Board board = em.find(Board.class, id);
         return board;
     }
-
-
 }
