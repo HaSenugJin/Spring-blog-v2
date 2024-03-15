@@ -104,4 +104,17 @@ public class BoardRepositoryTest {
         }
         System.out.println(q);
     }
+
+    @Test
+    public void deleteById_test(){
+        // given
+        int id = 1;
+
+        // when
+        // 내가 쿼리를 직접 적었으니까 플러쉬 안해도 된다.
+        boardRepository.deleteById(id);
+
+        // then
+        System.out.println(boardRepository.findAll().size());
+    }
 }
