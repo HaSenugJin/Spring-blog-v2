@@ -1,9 +1,13 @@
 package shop.mtcoding.blog.user;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+
+import java.util.stream.Stream;
 
 @Import(UserRepository.class)
 @DataJpaTest // db만 테스트 하면되니까 Datasource(connection pool), EntityManager 두개만 뛰운다.
@@ -22,16 +26,17 @@ public class userRepositoryTest {
     }
 
     @Test
-    public void save_test(UserRequest.JoinDTO joinDTO){
-        // given
+    public void save_test() {
+        UserRequest.JoinDTO joinDTO = new UserRequest.JoinDTO();
+        joinDTO.setUsername("user");
+        joinDTO.setPassword("1234");
+        joinDTO.setEmail("egdg@g");
+
         User user = joinDTO.toEntity();
-
-        user.setUsername("egdg");
-        user.setPassword("1234");
-        user.setEmail("egdg@naver.com");
-        // when
         userRepository.save(user);
-
-        // then
+        System.out.println(user.getUsername());
+        System.out.println(user.getPassword());
+        System.out.println(user.getEmail());
+        System.out.println(user.getId());
     }
 }
