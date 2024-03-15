@@ -32,7 +32,10 @@ public class UserController {
     }
 
     @GetMapping("/user/update-form")
-    public String updateForm() {
+    public String updateForm(HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userRepository.findById(sessionUser.getId());
+        request.setAttribute("user", user);
         return "user/update-form";
     }
 
@@ -47,6 +50,13 @@ public class UserController {
         User sessionUser = userRepository.findByUsernameAndPassword(requestDTO);
 
         session.setAttribute("sessionUser", sessionUser);
+        return "redirect:/";
+    }
+
+    @PostMapping("/user/update")
+    public String update(UserRequest.UpdateDTO requestDTO) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        userRepository.update(sessionUser.getId(), requestDTO);
         return "redirect:/";
     }
 }
