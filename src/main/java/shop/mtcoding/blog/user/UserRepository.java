@@ -31,7 +31,6 @@ public class UserRepository {
         Query query = em.createQuery("select u from User u where u.username = :username and u.password = :password", User.class);
         query.setParameter("username", loginDTO.getUsername());
         query.setParameter("password", loginDTO.getPassword());
-
         return (User) query.getSingleResult();
     }
 
