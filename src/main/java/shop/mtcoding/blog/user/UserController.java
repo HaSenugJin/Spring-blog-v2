@@ -22,7 +22,6 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final UserJAPRepository userJAPRepository;
     private final HttpSession session;
 
     @GetMapping("/user/update-form")

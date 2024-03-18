@@ -21,14 +21,31 @@ public class BoardController {
 
     private final BoardRepository boardRepository;
     private final BoardJAPRepository boardJAPRepository;
+    private final BoardService boardService;
     private final HttpSession session;
 
     @PostMapping("/board/save")
     public String save(BoardRequest.SaveDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        boardJAPRepository.save(requestDTO.toEntity(sessionUser));
+        boardService.save(requestDTO, sessionUser);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/board/{id}/update-form")
+    public String update(@PathVariable(name = "id") Integer id, HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Board board = boardService.updateForm(id, sessionUser.getId());
+        request.setAttribute("board", board);
+        return "board/update-form";
+    }
+
+    @PostMapping("/board/{id}/update")
+    public String findById(@PathVariable Integer id, BoardRequest.UpdateDTO requestDTO) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        boardService.update(id, sessionUser.getId(), requestDTO);
+
+        return "redirect:/board/" + id;
     }
 
     @GetMapping("/board/{id}")
@@ -66,39 +83,7 @@ public class BoardController {
         return "/board/save-form";
     }
 
-    @GetMapping("/board/{id}/update-form")
-    public String update(@PathVariable(name = "id") Integer id, HttpServletRequest request) {
-        Optional<Board> boardOp = boardJAPRepository.findById(id);
 
-        // 만약에 존재 한다면
-        if (boardOp.isPresent()) {
-            Board board = boardOp.get();
-            System.out.println("findById_test : " + board.getTitle());
-            request.setAttribute("board", board);
-        } else {
-            throw new Exception404("해당 게시글을 찾을 수 없습니다.");
-        }
-
-        return "board/update-form";
-    }
-
-    @PostMapping("/board/{id}/update")
-    public String findById(@PathVariable Integer id, BoardRequest.UpdateDTO requestDTO) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        Optional<Board> boardOp = boardJAPRepository.findById(id);
-
-        if (sessionUser.getId() != boardOp.get().getUser().getId()) {
-            throw new Exception403("게시글을 수정할 권한이 없습니다.");
-        }
-
-        if (boardOp.isPresent()) {
-            Board board = boardOp.get();
-            System.out.println("findById_test : " + board.getTitle());
-            boardRepository.updateById(id, requestDTO.getTitle(), requestDTO.getContent());
-        }
-
-        return "redirect:/board/" + id;
-    }
 
     @PostMapping("/board/{id}/delete")
     public String delete(@PathVariable Integer id) {
