@@ -2,6 +2,7 @@ package shop.mtcoding.blog.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,6 +19,9 @@ public class UserJPARepositoryTest {
 
     @Autowired
     private UserJAPRepository userJAPRepository;
+
+    @Autowired
+    private EntityManager em;
 
     @Test
     public void save_test(){
@@ -98,7 +102,24 @@ public class UserJPARepositoryTest {
 
         // when
         userJAPRepository.findByUsernameAndPassword(username, password);
-        
+
+        // then
+    }
+
+    @Test
+    public void update_test(){
+        // given
+        User user = User.builder()
+                .id(1)
+                .username("happy")
+                .password("1234")
+                .email("happy@nate.com")
+                .build();
+
+        // when
+        userJAPRepository.save(user);
+        em.flush();
+
         // then
     }
 }
