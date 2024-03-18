@@ -33,8 +33,7 @@ public class BoardController {
 
     @GetMapping("/board/{id}/update-form")
     public String update(@PathVariable(name = "id") Integer id, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardService.updateForm(id, sessionUser.getId());
+        Board board = boardService.updateForm(id);
         request.setAttribute("board", board);
         return "board/update-form";
     }
@@ -68,10 +67,7 @@ public class BoardController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-
-        List<Board> boardList = boardJAPRepository.findAll(sort);
-
+        List<Board> boardList = boardService.findAll();
         request.setAttribute("boardList", boardList);
 
         return "index";
@@ -82,23 +78,10 @@ public class BoardController {
         return "/board/save-form";
     }
 
-
-
     @PostMapping("/board/{id}/delete")
     public String delete(@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Optional<Board> boardOp = boardJAPRepository.findById(id);
-
-        if (sessionUser.getId() != boardOp.get().getUser().getId()) {
-            throw new Exception403("게시글을 삭제할 권한이 없습니다.");
-        }
-
-        if (boardOp.isPresent()) {
-            Board board = boardOp.get();
-            System.out.println("findById_test : " + board.getTitle());
-            boardRepository.deleteById(id);
-        }
-
+        boardService.delete(id, sessionUser.getId());
         return "redirect:/";
     }
 }

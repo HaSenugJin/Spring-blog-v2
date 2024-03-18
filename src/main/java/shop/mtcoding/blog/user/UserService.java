@@ -16,11 +16,14 @@ public class UserService {
     // 의존성 주입
     private final UserJAPRepository userJAPRepository;
 
+    // 회원정보 조회
     public User updateForm(int id) {
         return userJAPRepository.findById(id).orElseThrow(()
                 -> new Exception404("회원정보를 찾을 수 없습니다."));
     }
 
+
+    // 회원정보 수정
     @Transactional
     public User update(int id, UserRequest.UpdateDTO requestDTO) {
         User user = userJAPRepository.findById(id).orElseThrow(()
@@ -32,6 +35,7 @@ public class UserService {
         return user;
     } // 더티체킹
 
+    // 로그인
     public User login(UserRequest.LoginDTO requestDTO) {
         // 해시검사 비교 여기에 들어간다.
 
@@ -44,6 +48,7 @@ public class UserService {
         return sessionUser;
     }
 
+    // 회원가입
     @Transactional
     public void join(UserRequest.JoinDTO requestDTO) {
 
