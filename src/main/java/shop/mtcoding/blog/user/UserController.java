@@ -62,12 +62,8 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(UserRequest.LoginDTO requestDTO) {
-        try {
-            Optional<User> sessionUser = userJAPRepository.findByUsernameAndPassword(requestDTO.getUsername(), requestDTO.getPassword());
-            session.setAttribute("sessionUser", sessionUser);
-        } catch (EmptyResultDataAccessException e) {
-            throw new Exception401("유저아이디 혹은 비밀번호가 잘못되었습니다.");
-        }
+        User sessionUser = userService.login(requestDTO);
+        session.setAttribute("sessionUser", sessionUser);
         return "redirect:/";
     }
 
