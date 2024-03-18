@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 
 @Import(UserRepository.class)
 @DataJpaTest // db만 테스트 하면되니까 Datasource(connection pool), EntityManager 두개만 뛰운다.
-public class userRepositoryTest {
+public class UserRepositoryTest {
 
     @Autowired // 이 어노테이션을 써주면?
     private UserRepository userRepository;

@@ -14,17 +14,20 @@ import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.errors.exception.Exception403;
 import shop.mtcoding.blog._core.errors.exception.Exception500;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Controller
 public class UserController {
 
     private final UserRepository userRepository;
+    private final UserJAPRepository userJAPRepository;
     private final HttpSession session;
 
     @PostMapping("/join")
     public String join(UserRequest.JoinDTO requestDTO) {
         try {
-            userRepository.save(requestDTO.toEntity());
+            userJAPRepository.save(requestDTO.toEntity());
         } catch (DataIntegrityViolationException e) {
             throw new Exception400("동일한 유저네임이 존재합니다.");
         }
@@ -45,8 +48,12 @@ public class UserController {
     public String updateForm(HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
-        User user = userRepository.findById(sessionUser.getId());
-        request.setAttribute("user", user);
+        Optional<User> userOp = userJAPRepository.findById(sessionUser.getId());
+        if (userOp.isPresent()) {
+            // 겟으로 받아옴.
+            User user = userOp.get();
+            request.setAttribute("user", user);
+        }
         return "user/update-form";
     }
 
@@ -59,7 +66,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(UserRequest.LoginDTO requestDTO) {
         try {
-            User sessionUser = userRepository.findByUsernameAndPassword(requestDTO);
+            User sessionUser = userJAPRepository.findByUsernameAndPassword(requestDTO.getUsername(), requestDTO.getPassword());
             session.setAttribute("sessionUser", sessionUser);
         } catch (EmptyResultDataAccessException e) {
             throw new Exception401("유저아이디 혹은 비밀번호가 잘못되었습니다.");
