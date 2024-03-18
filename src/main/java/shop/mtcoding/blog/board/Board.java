@@ -31,6 +31,9 @@ public class Board {
     @CreationTimestamp // insert 될 때 날짜를 자동으로 넣어준다.
     private Timestamp createdAt;
 
+    @Transient //테이블 생성될 때 제외된다.
+    private Boolean isOwner;
+
     @Builder
     public Board(Integer id, String title, String content, User user, Timestamp createdAt) {
         this.id = id;

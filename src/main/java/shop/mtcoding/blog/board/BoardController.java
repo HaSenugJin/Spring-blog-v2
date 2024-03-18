@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import shop.mtcoding.blog._core.errors.exception.Exception403;
 import shop.mtcoding.blog.user.User;
 
@@ -46,22 +47,14 @@ public class BoardController {
         return "redirect:/board/" + id;
     }
 
+    // SSR(서버 사이드 렌더링)은 DTO 를 만들지 않아도 된다. 필요한 데이터만 렌더링해서 클라이언트에게
+    // 전달할 것이니까.
     @GetMapping("/board/{id}")
     public String detail(@PathVariable Integer id, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Optional<Board> board = boardJAPRepository.findByIdJoinUser(id);
+        Board board = boardService.findByJoinUser(id, sessionUser);
 
-        // 로그인을 하고 게시글의 주인이면 isOwner 가 true 가 된다.
-        boolean isOwner = false;
-        if (sessionUser != null) {
-            if (sessionUser.getId() == board.get().getUser().getId()) {
-                isOwner = true;
-            }
-        }
-
-        request.setAttribute("isOwner", isOwner);
         request.setAttribute("board", board);
-
         return "board/detail";
     }
 

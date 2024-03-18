@@ -9,12 +9,13 @@ import shop.mtcoding.blog._core.errors.exception.Exception404;
 import shop.mtcoding.blog.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service // IoC 에 등록된다.
 public class BoardService {
 
-    public final BoardJAPRepository boardJAPRepository;
+    private final BoardJAPRepository boardJAPRepository;
 
     // 글 쓰기
     @Transactional
@@ -70,5 +71,21 @@ public class BoardService {
     public List<Board> findAll() {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         return boardJAPRepository.findAll(sort);
+    }
+
+    public Board findByJoinUser(Integer boardId, User sessionUser) {
+        Board board = boardJAPRepository.findByIdJoinUser(boardId)
+                .orElseThrow(() -> new Exception404("게시글을 찾을 수 없습니다"));
+
+        boolean isOwner = false;
+        if(sessionUser != null){
+            if(sessionUser.getId() == board.getUser().getId()){
+                isOwner = true;
+            }
+        }
+
+        board.setIsOwner(isOwner);
+
+        return board;
     }
 }
