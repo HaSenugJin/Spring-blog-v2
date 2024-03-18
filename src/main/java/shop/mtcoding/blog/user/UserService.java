@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog._core.errors.exception.Exception400;
 import shop.mtcoding.blog._core.errors.exception.Exception401;
+import shop.mtcoding.blog._core.errors.exception.Exception404;
 
 import java.util.Optional;
 
@@ -15,6 +16,22 @@ public class UserService {
 
     // 의존성 주입
     private final UserJAPRepository userJAPRepository;
+
+    public User updateForm(int id) {
+        return userJAPRepository.findById(id).orElseThrow(()
+                -> new Exception404("회원정보를 찾을 수 없습니다."));
+    }
+
+    @Transactional
+    public User update(int id, UserRequest.UpdateDTO requestDTO) {
+        User user = userJAPRepository.findById(id).orElseThrow(()
+                -> new Exception404("회원정보를 찾을 수 없습니다."));
+        user.setPassword(requestDTO.getPassword());
+        user.setEmail(requestDTO.getEmail());
+        userJAPRepository.save(user);
+
+        return user;
+    } // 더티체킹
 
     public User login(UserRequest.LoginDTO requestDTO) {
         // 해시검사 비교 여기에 들어간다.
@@ -32,6 +49,7 @@ public class UserService {
     public void join(UserRequest.JoinDTO requestDTO) {
 
         // 유저네임 중복검사
+        // 여기에 orElseThrow 를 못쓰는 이유는 찾았을 때 쓰로우를 날려야 하기 때문 위랑 다르다
         Optional<User> userOP = userJAPRepository.findByUsername(requestDTO.getUsername());
 
         // 회원가입 할 때 유저 네임이 같은게 있으면 안됨, 비정상.

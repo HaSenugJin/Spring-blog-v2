@@ -25,6 +25,22 @@ public class UserController {
     private final UserJAPRepository userJAPRepository;
     private final HttpSession session;
 
+    @GetMapping("/user/update-form")
+    public String updateForm(HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userService.updateForm(sessionUser.getId());
+        request.setAttribute("user", user);
+        return "user/update-form";
+    }
+
+    @PostMapping("/user/update")
+    public String update(UserRequest.UpdateDTO requestDTO) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        userService.update(sessionUser.getId(), requestDTO);
+        session.setAttribute("sessionUser", sessionUser);
+        return "redirect:/";
+    }
+
     @PostMapping("/join")
     public String join(UserRequest.JoinDTO requestDTO) {
         userService.join(requestDTO);
@@ -41,18 +57,6 @@ public class UserController {
         return "user/login-form";
     }
 
-    @GetMapping("/user/update-form")
-    public String updateForm(HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        Optional<User> userOp = userJAPRepository.findById(sessionUser.getId());
-        if (userOp.isPresent()) {
-            // 겟으로 받아옴.
-            User user = userOp.get();
-            request.setAttribute("user", user);
-        }
-        return "user/update-form";
-    }
 
     @GetMapping("/logout")
     public String logout() {
@@ -64,22 +68,6 @@ public class UserController {
     public String login(UserRequest.LoginDTO requestDTO) {
         User sessionUser = userService.login(requestDTO);
         session.setAttribute("sessionUser", sessionUser);
-        return "redirect:/";
-    }
-
-    @PostMapping("/user/update")
-    public String update(UserRequest.UpdateDTO requestDTO) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        User user = User.builder()
-                .id(sessionUser.getId())
-                .username(requestDTO.getUsername())
-                .password(requestDTO.getPassword())
-                .email(requestDTO.getEmail())
-                .createdAt(requestDTO.getCreatedAt())
-                .build();
-
-        // when
-        userJAPRepository.save(user);
         return "redirect:/";
     }
 }
