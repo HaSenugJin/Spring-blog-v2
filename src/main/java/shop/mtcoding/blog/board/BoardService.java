@@ -7,9 +7,6 @@ import shop.mtcoding.blog._core.errors.exception.Exception403;
 import shop.mtcoding.blog._core.errors.exception.Exception404;
 import shop.mtcoding.blog.user.User;
 
-import javax.swing.plaf.PanelUI;
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service // IoC 에 등록된다.
 public class BoardService {

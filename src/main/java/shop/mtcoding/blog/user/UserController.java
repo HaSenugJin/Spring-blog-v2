@@ -1,21 +1,12 @@
 package shop.mtcoding.blog.user;
 
-import jakarta.persistence.NoResultException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import shop.mtcoding.blog._core.errors.exception.Exception400;
-import shop.mtcoding.blog._core.errors.exception.Exception401;
-import shop.mtcoding.blog._core.errors.exception.Exception403;
-import shop.mtcoding.blog._core.errors.exception.Exception500;
-
-import java.sql.Timestamp;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
