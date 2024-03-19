@@ -73,6 +73,7 @@ public class BoardService {
         return boardJAPRepository.findAll(sort);
     }
 
+    // 글 상세보기
     public Board findByJoinUser(Integer boardId, User sessionUser) {
         Board board = boardJAPRepository.findByIdJoinUser(boardId)
                 .orElseThrow(() -> new Exception404("게시글을 찾을 수 없습니다"));

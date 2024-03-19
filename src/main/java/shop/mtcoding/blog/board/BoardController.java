@@ -49,6 +49,7 @@ public class BoardController {
         Board board = boardService.findByJoinUser(id, sessionUser);
 
         request.setAttribute("board", board);
+        System.out.println("서버 사이드 렌더링 직전에는 board와 user만 조회된 상태이다.");
         return "board/detail";
     }
 

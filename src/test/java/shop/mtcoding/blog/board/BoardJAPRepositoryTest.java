@@ -61,13 +61,25 @@ public class BoardJAPRepositoryTest {
     @Test
     public void findByIdJoinUser_test(){
         // given
-        int id = 1;
+        int id = 4;
 
         // when
-        boardJAPRepository.findByIdJoinUser(id);
+        boardJAPRepository.findByIdJoinUser(id).get();
 
         // then
     }
+
+    @Test
+    public void findByIdJoinUserAndReplies_test(){
+        // given
+        int id = 4;
+
+        // when
+        Board board = boardJAPRepository.findByIdJoinUserAndReplies(id).get();
+
+        // then
+    }
+
 
     // findAll (sort)
     @Test
