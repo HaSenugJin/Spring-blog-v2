@@ -37,11 +37,11 @@ public class Board {
 
     // 원투매니는 레이지가 디폴트 전략이다.
     // 댓글이 없어도 크기는 0으로 유지하게 new 해놔야함 안그러면 for 문에서 터짐
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Reply> replies = new ArrayList<>();
 
     @Transient //테이블 생성될 때 제외된다.
-    private Boolean isOwner;
+    private Boolean isBoardOwner;
 
     @Builder
     public Board(Integer id, String title, String content, User user, Timestamp createdAt) {

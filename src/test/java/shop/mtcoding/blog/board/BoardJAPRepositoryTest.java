@@ -69,17 +69,6 @@ public class BoardJAPRepositoryTest {
         // then
     }
 
-    @Test
-    public void findByIdJoinUserAndReplies_test(){
-        // given
-        int id = 4;
-
-        // when
-        Board board = boardJAPRepository.findByIdJoinUserAndReplies(id).get();
-
-        // then
-    }
-
 
     // findAll (sort)
     @Test

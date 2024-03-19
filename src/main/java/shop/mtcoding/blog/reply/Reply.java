@@ -31,6 +31,9 @@ public class Reply {
     @CreationTimestamp // insert 될 때 날짜를 자동으로 넣어준다.
     private Timestamp createdAt;
 
+    @Transient
+    private boolean isReplyOwner;
+
     @Builder
     public Reply(Integer id, String comment, User user, Board board, Timestamp createdAt) {
         this.id = id;
