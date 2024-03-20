@@ -17,7 +17,7 @@ public class UserService {
     private final UserJAPRepository userJAPRepository;
 
     // 회원정보 조회
-    public User updateForm(int id) {
+    public User findById(int id) {
         return userJAPRepository.findById(id).orElseThrow(()
                 -> new Exception404("회원정보를 찾을 수 없습니다."));
     }
@@ -50,7 +50,7 @@ public class UserService {
 
     // 회원가입
     @Transactional
-    public void join(UserRequest.JoinDTO requestDTO) {
+    public User join(UserRequest.JoinDTO requestDTO) {
 
         // 유저네임 중복검사
         // 여기에 orElseThrow 를 못쓰는 이유는 찾았을 때 쓰로우를 날려야 하기 때문 위랑 다르다
@@ -61,6 +61,6 @@ public class UserService {
             throw new Exception400("중복된 유저네임입니다.");
         }
 
-        userJAPRepository.save(requestDTO.toEntity());
+        return userJAPRepository.save(requestDTO.toEntity());
     }
 }

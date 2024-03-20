@@ -3,52 +3,64 @@ package shop.mtcoding.blog.board;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import shop.mtcoding.blog._core.utils.ApiUtil;
 import shop.mtcoding.blog.user.User;
 import java.util.List;
 
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class BoardController {
 
     private final BoardService boardService;
     private final HttpSession session;
 
-    // TODO: 글 목록조회 API 필요 @GetMapping("/")
+    @GetMapping("/")
+    public ResponseEntity<?> main() {
+        List<Board> boardList = boardService.findAll();
+        return ResponseEntity.ok(new ApiUtil(boardList));
+    }
 
+    @GetMapping("/api/boards/{id}")
+    public ResponseEntity<?> findOne(@PathVariable Integer id) {
+        Board board = boardService.updateForm(id);
+        return ResponseEntity.ok(new ApiUtil(board));
+    }
 
-    // TODO: 글 조회 API 필요 @GetMapping("/api/boards/{id}")
-
-
-    // TODO: 글 상세보기 API 필요 @GetMapping("/api/boards/{id}/detail")
-
+    @GetMapping("/api/boards/{id}/detail")
+    public ResponseEntity<?> detail(@PathVariable Integer id) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Board board = boardService.findByJoinUser(id, sessionUser);
+        return ResponseEntity.ok(new ApiUtil(board));
+    }
 
 
     @PostMapping("/api/boards")
-    public String save(BoardRequest.SaveDTO requestDTO) {
+    public ResponseEntity<?> save(@RequestBody BoardRequest.SaveDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        boardService.save(requestDTO, sessionUser);
+        Board board = boardService.save(requestDTO, sessionUser);
 
-        return "redirect:/";
+        return ResponseEntity.ok(new ApiUtil(board));
     }
 
     @PutMapping("/api/boards/{id}")
-    public String findById(@PathVariable Integer id, BoardRequest.UpdateDTO requestDTO) {
+    public ResponseEntity<?> findById(@PathVariable Integer id, @RequestBody BoardRequest.UpdateDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        boardService.update(id, sessionUser.getId(), requestDTO);
+        Board board = boardService.update(id, sessionUser.getId(), requestDTO);
 
-        return "redirect:/board/" + id;
+        return ResponseEntity.ok(new ApiUtil(board));
     }
 
     // SSR(서버 사이드 렌더링)은 DTO 를 만들지 않아도 된다. 필요한 데이터만 렌더링해서 클라이언트에게
     // 전달할 것이니까.
 
     @DeleteMapping("/api/boards/{id}")
-    public String delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         boardService.delete(id, sessionUser.getId());
-        return "redirect:/";
+        return ResponseEntity.ok(new ApiUtil(null));
     }
 }

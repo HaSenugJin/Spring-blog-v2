@@ -19,8 +19,8 @@ public class BoardService {
 
     // 글 쓰기
     @Transactional
-    public void save(BoardRequest.SaveDTO requestDTO, User sessionUser) {
-        boardJAPRepository.save(requestDTO.toEntity(sessionUser));
+    public Board save(BoardRequest.SaveDTO requestDTO, User sessionUser) {
+        return boardJAPRepository.save(requestDTO.toEntity(sessionUser));
     }
 
     // 글 수정

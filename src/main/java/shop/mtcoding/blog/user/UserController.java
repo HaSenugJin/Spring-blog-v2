@@ -2,44 +2,49 @@ package shop.mtcoding.blog.user;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import shop.mtcoding.blog._core.utils.ApiUtil;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class UserController {
 
     private final UserService userService;
     private final HttpSession session;
 
-    // TODO: 회원정보 조회 API 필요 @GetMapping("/api/users/{id}")
+    @GetMapping("/api/users/{id}")
+    public ResponseEntity<?> userinfo(@PathVariable Integer id) {
+        User user = userService.findById(id);
+        return ResponseEntity.ok(new ApiUtil(user));
+    }
 
+    // 아이디를 언제 받아와야 하는가 관리자가 로그인 해서 바꿀 수 있게 하려면 필요하다.
+    // 하지만 프론트엔드 입장에서는 주소를 이렇게 적는편이 알기 쉽고 좋다.
     @PutMapping("/api/users/{id}")
-    public String update(UserRequest.UpdateDTO requestDTO) {
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody UserRequest.UpdateDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         userService.update(sessionUser.getId(), requestDTO);
         session.setAttribute("sessionUser", sessionUser);
-        return "redirect:/";
+        return ResponseEntity.ok(new ApiUtil(sessionUser));
     }
 
     @PostMapping("/join")
-    public String join(UserRequest.JoinDTO requestDTO) {
-        userService.join(requestDTO);
-        return "redirect:/";
+    public ResponseEntity<?> join(@RequestBody UserRequest.JoinDTO requestDTO) {
+        User user = userService.join(requestDTO);
+        return ResponseEntity.ok(new ApiUtil(user));
     }
 
     @GetMapping("/logout")
-    public String logout() {
+    public ResponseEntity<?> logout() {
         session.invalidate();
-        return "redirect:/";
+        return ResponseEntity.ok(new ApiUtil(null));
     }
 
     @PostMapping("/login")
-    public String login(UserRequest.LoginDTO requestDTO) {
+    public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO requestDTO) {
         User sessionUser = userService.login(requestDTO);
         session.setAttribute("sessionUser", sessionUser);
-        return "redirect:/";
+        return ResponseEntity.ok(new ApiUtil(null));
     }
 }

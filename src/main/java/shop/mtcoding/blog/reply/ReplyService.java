@@ -17,13 +17,13 @@ public class ReplyService {
 
     // 댓글쓰기
     @Transactional
-    public void save(ReplyRequest.SaveDTO requestDTO, User sessionUser) {
+    public Reply save(ReplyRequest.SaveDTO requestDTO, User sessionUser) {
         Board board = boardJAPRepository.findById(requestDTO.getBoardId())
                 .orElseThrow(() -> new Exception404("없는 게시글에 댓글을 작성할 수 없습니다."));
 
         Reply reply = requestDTO.toEntity(sessionUser, board);
 
-        replyJPARepository.save(reply);
+        return replyJPARepository.save(reply);
     }
 
     // 댓글삭제
