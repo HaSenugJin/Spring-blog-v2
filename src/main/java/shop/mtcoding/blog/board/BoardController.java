@@ -20,8 +20,8 @@ public class BoardController {
 
     @GetMapping("/")
     public ResponseEntity<?> main() {
-        List<Board> boardList = boardService.findAll();
-        return ResponseEntity.ok(new ApiUtil(boardList));
+        List<BoardResponse.MainDTO> requestDTO = boardService.findAll();
+        return ResponseEntity.ok(new ApiUtil(requestDTO));
     }
 
     @GetMapping("/api/boards/{id}")
@@ -36,7 +36,6 @@ public class BoardController {
         Board board = boardService.findByJoinUser(id, sessionUser);
         return ResponseEntity.ok(new ApiUtil(board));
     }
-
 
     @PostMapping("/api/boards")
     public ResponseEntity<?> save(@RequestBody BoardRequest.SaveDTO requestDTO) {

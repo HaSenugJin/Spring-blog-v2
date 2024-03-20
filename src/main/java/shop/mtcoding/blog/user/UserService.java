@@ -17,9 +17,10 @@ public class UserService {
     private final UserJAPRepository userJAPRepository;
 
     // 회원정보 조회
-    public User findById(int id) {
-        return userJAPRepository.findById(id).orElseThrow(()
-                -> new Exception404("회원정보를 찾을 수 없습니다."));
+    public UserResponse.DTO findById(int id) {
+        User user = userJAPRepository.findById(id)
+                .orElseThrow(() -> new Exception404("회원정보를 찾을 수 없습니다"));
+        return new UserResponse.DTO(user); // 엔티티 생명 종료
     }
 
 
