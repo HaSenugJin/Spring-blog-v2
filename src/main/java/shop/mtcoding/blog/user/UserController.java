@@ -1,7 +1,5 @@
 package shop.mtcoding.blog.user;
 
-
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,13 +13,7 @@ public class UserController {
     private final UserService userService;
     private final HttpSession session;
 
-    @GetMapping("/user/update-form")
-    public String updateForm(HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        User user = userService.updateForm(sessionUser.getId());
-        request.setAttribute("user", user);
-        return "user/update-form";
-    }
+    // TODO: 회원정보 조회 API 필요
 
     @PostMapping("/user/update")
     public String update(UserRequest.UpdateDTO requestDTO) {
@@ -36,17 +28,6 @@ public class UserController {
         userService.join(requestDTO);
         return "redirect:/";
     }
-
-    @GetMapping("/join-form")
-    public String joinForm() {
-        return "user/join-form";
-    }
-
-    @GetMapping("/login-form")
-    public String loginForm() {
-        return "user/login-form";
-    }
-
 
     @GetMapping("/logout")
     public String logout() {

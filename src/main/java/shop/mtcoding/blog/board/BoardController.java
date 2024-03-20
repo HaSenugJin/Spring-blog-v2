@@ -17,6 +17,10 @@ public class BoardController {
 
     private final BoardService boardService;
     private final HttpSession session;
+    
+    // TODO: 글 상세보기 API 필요
+    // TODO: 글 목록조회 API 필요
+    // TODO: 글 목록조회 API 필요
 
     @PostMapping("/board/save")
     public String save(BoardRequest.SaveDTO requestDTO) {
@@ -24,13 +28,6 @@ public class BoardController {
         boardService.save(requestDTO, sessionUser);
 
         return "redirect:/";
-    }
-
-    @GetMapping("/board/{id}/update-form")
-    public String update(@PathVariable(name = "id") Integer id, HttpServletRequest request) {
-        Board board = boardService.updateForm(id);
-        request.setAttribute("board", board);
-        return "board/update-form";
     }
 
     @PostMapping("/board/{id}/update")
@@ -43,28 +40,7 @@ public class BoardController {
 
     // SSR(서버 사이드 렌더링)은 DTO 를 만들지 않아도 된다. 필요한 데이터만 렌더링해서 클라이언트에게
     // 전달할 것이니까.
-    @GetMapping("/board/{id}")
-    public String detail(@PathVariable Integer id, HttpServletRequest request) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardService.findByJoinUser(id, sessionUser);
 
-        request.setAttribute("board", board);
-        System.out.println("서버 사이드 렌더링 직전에는 board와 user만 조회된 상태이다.");
-        return "board/detail";
-    }
-
-    @GetMapping("/")
-    public String index(HttpServletRequest request) {
-        List<Board> boardList = boardService.findAll();
-        request.setAttribute("boardList", boardList);
-
-        return "index";
-    }
-
-    @GetMapping("/board/save-form")
-    public String saveForm() {
-        return "/board/save-form";
-    }
 
     @PostMapping("/board/{id}/delete")
     public String delete(@PathVariable Integer id) {
