@@ -75,29 +75,10 @@ public class BoardService {
     }
 
     // 글 상세보기
-    public Board findByJoinUser(Integer boardId, User sessionUser) {
+    public BoardResponse.DetailDTO findByJoinUser(Integer boardId, User sessionUser) {
         Board board = boardJAPRepository.findByIdJoinUser(boardId)
                 .orElseThrow(() -> new Exception404("게시글을 찾을 수 없습니다"));
 
-        boolean isBoardOwner = false;
-        if(sessionUser != null){
-            if(sessionUser.getId() == board.getUser().getId()){
-                isBoardOwner = true;
-            }
-        }
-
-        board.setIsBoardOwner(isBoardOwner);
-
-        board.getReplies().forEach(reply -> {
-            boolean isReplyOwner = false;
-            if (sessionUser != null) {
-                if (reply.getUser().getId() == sessionUser.getId()) {
-                    isReplyOwner = true;
-                }
-            }
-            reply.setReplyOwner(isReplyOwner);
-        });
-
-        return board;
+        return new BoardResponse.DetailDTO(board, sessionUser);
     }
 }

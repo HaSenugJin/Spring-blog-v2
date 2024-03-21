@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.utils.ApiUtil;
 import shop.mtcoding.blog.user.User;
+
 import java.util.List;
 
 
@@ -36,8 +37,8 @@ public class BoardController {
     @GetMapping("/api/boards/{id}/detail")
     public ResponseEntity<?> detail(@PathVariable Integer id) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardService.findByJoinUser(id, sessionUser);
-        return ResponseEntity.ok(new ApiUtil(board));
+        BoardResponse.DetailDTO respDTO = boardService.findByJoinUser(id, sessionUser);
+        return ResponseEntity.ok(new ApiUtil(respDTO));
     }
 
     // 글쓰기
