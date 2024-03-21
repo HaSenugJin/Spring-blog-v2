@@ -19,13 +19,14 @@ public class BoardService {
 
     // 글 쓰기
     @Transactional
-    public Board save(BoardRequest.SaveDTO requestDTO, User sessionUser) {
-        return boardJAPRepository.save(requestDTO.toEntity(sessionUser));
+    public BoardResponse.DTO save(BoardRequest.SaveDTO requestDTO, User sessionUser) {
+        Board board = boardJAPRepository.save(requestDTO.toEntity(sessionUser));
+        return new BoardResponse.DTO(board);
     }
 
     // 글 수정
     @Transactional
-    public Board update(Integer boardId, Integer sessionUserId, BoardRequest.UpdateDTO requestDTO) {
+    public BoardResponse.DTO update(Integer boardId, Integer sessionUserId, BoardRequest.UpdateDTO requestDTO) {
 
         // 조회 및 예외처리
         Board board = boardJAPRepository.findById(boardId)
@@ -40,16 +41,16 @@ public class BoardService {
         board.setTitle(requestDTO.getTitle());
         board.setContent(requestDTO.getContent());
 
-        return board;
+        return new BoardResponse.DTO(board);
     } // 더티체킹
 
     // 글 수정 조회
-    public Board updateForm(Integer boardId) {
+    public BoardResponse.DTO updateForm(Integer boardId) {
         // 조회 및 예외처리
         Board board = boardJAPRepository.findById(boardId)
                 .orElseThrow(() -> new Exception404("게시글을 찾을 수 없습니다."));
 
-        return board;
+        return new BoardResponse.DTO(board);
     }
 
     // 글삭제

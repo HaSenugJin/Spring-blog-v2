@@ -29,8 +29,8 @@ public class BoardController {
     // 글 조회(업데이트전에)
     @GetMapping("/api/boards/{id}")
     public ResponseEntity<?> findOne(@PathVariable Integer id) {
-        Board board = boardService.updateForm(id);
-        return ResponseEntity.ok(new ApiUtil(board));
+        BoardResponse.DTO respDTO = boardService.updateForm(id);
+        return ResponseEntity.ok(new ApiUtil(respDTO));
     }
 
     // 글 상세보기
@@ -45,7 +45,7 @@ public class BoardController {
     @PostMapping("/api/boards")
     public ResponseEntity<?> save(@RequestBody BoardRequest.SaveDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardService.save(requestDTO, sessionUser);
+        BoardResponse.DTO board = boardService.save(requestDTO, sessionUser);
 
         return ResponseEntity.ok(new ApiUtil(board));
     }
@@ -54,7 +54,7 @@ public class BoardController {
     @PutMapping("/api/boards/{id}")
     public ResponseEntity<?> findById(@PathVariable Integer id, @RequestBody BoardRequest.UpdateDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardService.update(id, sessionUser.getId(), requestDTO);
+        BoardResponse.DTO board = boardService.update(id, sessionUser.getId(), requestDTO);
 
         return ResponseEntity.ok(new ApiUtil(board));
     }
