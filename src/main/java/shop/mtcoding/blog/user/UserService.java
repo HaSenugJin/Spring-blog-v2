@@ -31,7 +31,6 @@ public class UserService {
                 -> new Exception404("회원정보를 찾을 수 없습니다."));
         user.setPassword(requestDTO.getPassword());
         user.setEmail(requestDTO.getEmail());
-        userJAPRepository.save(user);
 
         return user;
     } // 더티체킹

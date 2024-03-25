@@ -28,7 +28,9 @@ public class UserController {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User newssionUser = userService.update(sessionUser.getId(), requestDTO);
         session.setAttribute("sessionUser", newssionUser);
-        return ResponseEntity.ok(new ApiUtil(newssionUser));
+
+        UserResponse.DTO respDTO = new UserResponse.DTO(sessionUser);
+        return ResponseEntity.ok(new ApiUtil(respDTO));
     }
 
     // 회원가입

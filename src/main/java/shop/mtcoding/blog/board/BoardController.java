@@ -45,18 +45,18 @@ public class BoardController {
     @PostMapping("/api/boards")
     public ResponseEntity<?> save(@RequestBody BoardRequest.SaveDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        BoardResponse.DTO board = boardService.save(requestDTO, sessionUser);
+        BoardResponse.DTO respDTO = boardService.save(requestDTO, sessionUser);
 
-        return ResponseEntity.ok(new ApiUtil(board));
+        return ResponseEntity.ok(new ApiUtil(respDTO));
     }
 
     // 글수정
     @PutMapping("/api/boards/{id}")
     public ResponseEntity<?> findById(@PathVariable Integer id, @RequestBody BoardRequest.UpdateDTO requestDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        BoardResponse.DTO board = boardService.update(id, sessionUser.getId(), requestDTO);
+        BoardResponse.DTO respDTO = boardService.update(id, sessionUser.getId(), requestDTO);
 
-        return ResponseEntity.ok(new ApiUtil(board));
+        return ResponseEntity.ok(new ApiUtil(respDTO));
     }
 
     // SSR(서버 사이드 렌더링)은 DTO 를 만들지 않아도 된다. 필요한 데이터만 렌더링해서 클라이언트에게
