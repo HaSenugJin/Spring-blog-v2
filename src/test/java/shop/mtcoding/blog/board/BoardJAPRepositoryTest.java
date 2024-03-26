@@ -80,7 +80,7 @@ public class BoardJAPRepositoryTest {
         List<Board> boardList = boardJAPRepository.findAll(sort);
 
         // then
-        System.out.println("findAll_test : " + boardList);
+        // System.out.println("findAll_test : " + boardList);
     }
 
     // deleteById
